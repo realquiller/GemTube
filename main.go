@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
 	"os"
-	"sort"
 )
 
 func (v *Video) String() string {
@@ -34,42 +34,52 @@ func createLogFile() {
 
 func main() {
 	createLogFile()
-	var filtered_results []Video
-	var nextPageToken string // originally in config.go
+	// var filtered_results []Video
+	// var nextPageToken string // originally in config.go
 
-	for youtubePage <= 10 {
-		var data []SearchResult
-		var err error
+	// for youtubePage <= 10 {
+	// 	var data []SearchResult
+	// 	var err error
 
-		data, nextPageToken, err = getSearchResults(nextPageToken)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
+	// 	data, nextPageToken, err = getSearchResults(nextPageToken)
+	// 	if err != nil {
+	// 		fmt.Println(err)
+	// 		return
+	// 	}
 
-		results, err := filterVideos(getVideoIDs(data))
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
+	// 	results, err := filterVideos(getVideoIDs(data))
+	// 	if err != nil {
+	// 		fmt.Println(err)
+	// 		return
+	// 	}
 
-		filtered_results = append(filtered_results, results...)
+	// 	filtered_results = append(filtered_results, results...)
 
-		// 🧠 Stop only if no more pages or enough results
-		if len(results) < targetResults && nextPageToken != "" {
-			youtubePage++
-			continue
-		}
+	// 	// 🧠 Stop only if no more pages or enough results
+	// 	if len(results) < targetResults && nextPageToken != "" {
+	// 		youtubePage++
+	// 		continue
+	// 	}
 
-		break
-	}
+	// 	break
+	// }
 
-	// sort by score
-	sort.Slice(filtered_results, func(i, j int) bool {
-		return filtered_results[i].Score > filtered_results[j].Score
-	})
+	// // sort by score
+	// sort.Slice(filtered_results, func(i, j int) bool {
+	// 	return filtered_results[i].Score > filtered_results[j].Score
+	// })
 
-	for _, result := range filtered_results {
-		fmt.Println(result.Summary())
+	// for _, result := range filtered_results {
+	// 	fmt.Println(result.Summary())
+	// }
+
+	// Serve files from the ./public folder
+	fs := http.FileServer(http.Dir("./public"))
+	http.Handle("/", fs)
+
+	log.Println("Starting server on :8080...")
+	err := http.ListenAndServe(":8080", nil)
+	if err != nil {
+		log.Fatal(err)
 	}
 }

@@ -79,13 +79,7 @@ function createSearchSection(): HTMLElement {
 
 function createVideoCard(video: Video): HTMLElement {
   const card = document.createElement("div");
-  card.style.borderRadius = "24px";
-  card.style.overflow = "hidden";
   card.style.cursor = "pointer";
-  card.style.boxShadow = "0 8px 16px rgba(0,0,0,0.1)";
-  card.style.transition = "transform 0.2s";
-  card.onmouseenter = () => (card.style.transform = "scale(1.02)");
-  card.onmouseleave = () => (card.style.transform = "scale(1)");
   card.style.width = "100%";
 
   const scoreBadge = document.createElement("span");
@@ -96,10 +90,9 @@ function createVideoCard(video: Video): HTMLElement {
   scoreBadge.style.background = "#e0e0e0";
   scoreBadge.style.borderRadius = "9999px";
   scoreBadge.style.padding = "4px 6px";
-  scoreBadge.style.lineHeight = "1";
   scoreBadge.style.fontSize = "12px";
+  scoreBadge.style.fontWeight = "600"; // Bolder text
   scoreBadge.style.marginLeft = "8px";
-  scoreBadge.style.transform = "translateY(-2px)"; // Gentle lift
 
   scoreBadge.innerHTML = `
     ${video.score.toFixed(2)}
@@ -111,7 +104,10 @@ function createVideoCard(video: Video): HTMLElement {
 
   card.innerHTML = `
     <div style="width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 16px;">
-      <img src="${video.thumbnail}" alt="Thumbnail" style="width: 100%; height: 100%; object-fit: cover;">
+      <img 
+        src="${video.thumbnail}" 
+        alt="Thumbnail" 
+        style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.2s;">
     </div>
     <div style="display: flex; align-items: flex-start; gap: 16px; margin-top: 16px;">
       <img src="${video.channelThumbnail}" alt="Channel" style="border-radius: 50%; width: 60px; height: 60px;">
@@ -125,6 +121,13 @@ function createVideoCard(video: Video): HTMLElement {
     </div>
   `;
 
+  // Hover effect only on thumbnail
+  const thumbnail = card.querySelector("img[alt='Thumbnail']") as HTMLImageElement;
+  if (thumbnail) {
+    card.onmouseenter = () => (thumbnail.style.transform = "scale(1.05)");
+    card.onmouseleave = () => (thumbnail.style.transform = "scale(1)");
+  }
+
   const infoSection = card.querySelector("div > div > div:nth-child(3)");
   if (infoSection) {
     infoSection.appendChild(scoreBadge);
@@ -133,6 +136,7 @@ function createVideoCard(video: Video): HTMLElement {
   card.onclick = () => alert(`Navigate to video ${video.title}`);
   return card;
 }
+
 
 
 function renderVideoGrid(videos: Video[]): void {

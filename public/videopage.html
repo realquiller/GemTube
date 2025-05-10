@@ -10,7 +10,9 @@
     <!-- Header Bar -->
     <header>
         <img src="./assets/gemtube.webp" alt="GemTube Logo" class="logo">
-        <input type="text" placeholder="Search..." class="search-bar">
+        <div class="search-bar-wrapper">
+            <input type="text" placeholder="Search..." class="search-bar">
+        </div>
     </header>
 
     <!-- Main Video Section -->
@@ -18,19 +20,22 @@
         <section class="video-section">
             <div class="video-player">
                 <div class="thumbnail-placeholder">Video</div>
+                <div class="video-overlay">▶ Play</div>
             </div>
             <h1 class="video-title">Gem Title</h1>
-            <div class="channel-info">
-                <div class="avatar-placeholder">Avatar</div>
-                <div>
-                    <p class="channel-name">Channel Name</p>
-                    <p class="subscribers">XXX subscribers</p>
+            <div class="channel-info-wrapper">
+                <div class="channel-info">
+                    <div class="avatar-placeholder">Avatar</div>
+                    <div>
+                        <p class="channel-name">Channel Name</p>
+                        <p class="subscribers">XXX subscribers</p>
+                    </div>
                 </div>
-            </div>
-            <div class="engagement-bar">
-                <button class="like-btn">👍 XXX</button>
-                <button class="dislike-btn">👎</button>
-                <button class="share-btn">🔗 Share</button>
+                <div class="engagement-bar">
+                    <button class="like-btn">👍 XXX</button>
+                    <button class="dislike-btn">👎</button>
+                    <button class="share-btn">🔗 Share</button>
+                </div>
             </div>
             <div class="description">
                 <p>XXX views • XXX Y/M/D ago</p>

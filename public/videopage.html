@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GemTube - Watch</title>
+    <link rel="stylesheet" href="styles/videopage.css">
+</head>
+<body>
+    <!-- Header Bar -->
+    <header>
+        <img src="./assets/gemtube.webp" alt="GemTube Logo" class="logo">
+        <input type="text" placeholder="Search..." class="search-bar">
+    </header>
+
+    <!-- Main Video Section -->
+    <main>
+        <section class="video-section">
+            <div class="video-player">
+                <div class="thumbnail-placeholder">Video</div>
+            </div>
+            <h1 class="video-title">Gem Title</h1>
+            <div class="channel-info">
+                <div class="avatar-placeholder">Avatar</div>
+                <div>
+                    <p class="channel-name">Channel Name</p>
+                    <p class="subscribers">XXX subscribers</p>
+                </div>
+            </div>
+            <div class="engagement-bar">
+                <button class="like-btn">👍 XXX</button>
+                <button class="dislike-btn">👎</button>
+                <button class="share-btn">🔗 Share</button>
+            </div>
+            <div class="description">
+                <p>XXX views • XXX Y/M/D ago</p>
+                <p class="desc-text">This is a sample description for the video. It will be replaced later via TypeScript logic. <span class="more">...more</span></p>
+            </div>
+
+            <!-- Category Section Placeholder -->
+            <div class="category-section">
+                <div class="category-card">
+                    🎮 Videogame Name
+                    <p class="year">Year</p>
+                    <a href="#">Browse Game ></a>
+                </div>
+                <div class="category-card">
+                    📚 Gaming
+                    <a href="#">Browse All Gaming ></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Suggested Videos Sidebar -->
+        <aside class="suggested-sidebar">
+            <div class="suggested-video">
+                <div class="thumbnail-small">Thumbnail</div>
+                <div>
+                    <p class="suggested-title">Gem Title 1</p>
+                    <p class="suggested-meta">Channel Name<br>XXX views • X Y/M/D ago</p>
+                </div>
+            </div>
+            <!-- Repeat the suggested-video div for more suggestions -->
+        </aside>
+    </main>
+
+    <!-- Comments Section -->
+    <section class="comments-section">
+        <h2>XXX Comments</h2>
+        <div class="comment">
+            <div class="avatar-placeholder">Avatar</div>
+            <div>
+                <p><strong>@username</strong> • X Y/M/D ago</p>
+                <p>Sample comment text here...</p>
+                <a href="#" class="replies-link">XXX replies</a>
+            </div>
+        </div>
+        <!-- Repeat for more comments -->
+    </section>
+
+    <script src="scripts/video.js"></script>
+</body>
+</html>

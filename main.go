@@ -47,8 +47,10 @@ func checkGems(results []Video, mode string) {
 func setupFlags() string {
 	var query string
 	flag.StringVar(&query, "query", "oblivion+remastered+patches", "Search query for Youtube")
-	flag.IntVar(&maxResults, "maxResults", 50, "Maximum number of results to fetch (max 500)")
-	flag.IntVar(&targetResults, "targetResults", 20, "Target number of results to show")
+	flag.IntVar(&maxResults, "maxResults", defaultMaxResults,
+		"max videos per YouTube search (max 500)")
+	flag.IntVar(&targetResults, "targetResults", defaultTargetResults,
+		"how many “gems” you’ll keep/display")
 	flag.Parse()
 	return query
 }
@@ -56,8 +58,15 @@ func setupFlags() string {
 func main() {
 	createLogFile()
 
-	mode := os.Getenv("MODE")
-	mode = strings.ToUpper(mode)
+	mode := strings.ToUpper(os.Getenv("MODE"))
+
+	if mode == "API" {
+		maxResults = defaultMaxResults
+		targetResults = defaultTargetResults
+	}
+
+	// log.Printf("Starting in %s mode – maxResults=%d, targetResults=%d\n",
+	// 	mode, maxResults, targetResults)
 
 	if mode == "CLI" {
 		query := setupFlags()

@@ -1,202 +1,22 @@
-// Updated for balanced layout, light/dark mode toggle, and perfect 16:9 thumbnails
+// public/scripts/gemtube.ts
+// ---- GemTube SPA ----
 
-const app = document.getElementById("app") as HTMLDivElement;
-let isDarkMode = true;
+// Log load
+console.log("💎 [GemTube] script loaded");
 
-function toggleTheme() {
-  document.body.style.backgroundColor = isDarkMode ? "#ffffff" : "#181818";
-  document.body.style.color = isDarkMode ? "#000000" : "#ffffff";
-  isDarkMode = !isDarkMode;
+// API response type
+interface APIVideo {
+  video_title: string;
+  channel_name: string;
+  video_views: string;
+  video_score: number;
+  video_thumbnail_standard: string;
+  video_thumbnail_max: string;
+  channel_avatar: string;
+  video_published_at: string;
 }
 
-function createThemeToggle(): HTMLElement {
-  const toggle = document.createElement("button");
-  toggle.innerText = "Toggle Theme";
-  toggle.style.position = "fixed";
-  toggle.style.top = "24px";
-  toggle.style.right = "24px";
-  toggle.style.padding = "12px 20px";
-  toggle.style.fontSize = "16px";
-  toggle.style.borderRadius = "12px";
-  toggle.style.border = "none";
-  toggle.style.backgroundColor = "#60a5fa";
-  toggle.style.color = "#fff";
-  toggle.style.cursor = "pointer";
-  toggle.onclick = toggleTheme;
-
-  return toggle;
-}
-
-function createLogo(): HTMLElement {
-  const logo = document.createElement("div");
-  logo.innerHTML = `<img src="./assets/gemtube.webp" alt="GemTube Logo" style="width: 600px; margin-bottom: 80px;">`;
-  logo.style.textAlign = "center";
-  return logo;
-}
-
-function createSearchSection(): HTMLElement {
-  const container = document.createElement("div");
-  container.style.display = "flex";
-  container.style.flexDirection = "column";
-  container.style.alignItems = "center";
-  container.style.justifyContent = "center";
-  container.style.height = "100vh";
-  container.style.gap = "40px";
-
-  const searchWrapper = document.createElement("div");
-  searchWrapper.style.display = "flex";
-  searchWrapper.style.gap = "24px";
-
-  const input = document.createElement("input");
-  input.type = "text";
-  input.placeholder = "What would you like to watch?";
-  input.style.width = "700px";
-  input.style.padding = "24px 32px";
-  input.style.fontSize = "28px";
-  input.style.borderRadius = "16px";
-  input.style.border = "1px solid #ccc";
-
-  const button = document.createElement("button");
-  button.innerText = "Search";
-  button.style.padding = "24px 36px";
-  button.style.fontSize = "24px";
-  button.style.borderRadius = "16px";
-  button.style.border = "none";
-  button.style.backgroundColor = "#60a5fa";
-  button.style.color = "#fff";
-  button.style.cursor = "pointer";
-  button.onclick = () => handleSearch(input.value);
-
-  searchWrapper.appendChild(input);
-  searchWrapper.appendChild(button);
-
-  container.appendChild(createLogo());
-  container.appendChild(searchWrapper);
-  container.appendChild(createThemeToggle());
-
-  return container;
-}
-
-function createVideoCard(video: Video): HTMLElement {
-  const card = document.createElement("div");
-  card.style.cursor = "pointer";
-  card.style.width = "100%";
-
-  const scoreBadge = document.createElement("span");
-  scoreBadge.style.display = "inline-flex";
-  scoreBadge.style.alignItems = "center";
-  scoreBadge.style.justifyContent = "center";
-  scoreBadge.style.gap = "4px";
-  scoreBadge.style.background = "#e0e0e0";
-  scoreBadge.style.borderRadius = "9999px";
-  scoreBadge.style.padding = "4px 6px";
-  scoreBadge.style.fontSize = "12px";
-  scoreBadge.style.fontWeight = "600"; // Bolder text
-  scoreBadge.style.marginLeft = "8px";
-
-  scoreBadge.innerHTML = `
-    ${video.score.toFixed(2)}
-    <svg xmlns="http://www.w3.org/2000/svg" width="9" height="8" viewBox="0 0 9 8" fill="none">
-      <path d="M4.49978 6.70199L2.31845 7.92498C2.22209 7.98206 2.12134 8.00652 2.01622 7.99836C1.91109 7.99021 1.81911 7.9576 1.74027 7.90052C1.66142 7.84345 1.6001 7.77219 1.5563 7.68675C1.5125 7.6013 1.50374 7.50542 1.53002 7.3991L2.1082 5.08764L0.176543 3.53445C0.0889399 3.46107 0.0342753 3.37741 0.0125496 3.28349C-0.00917605 3.18956 -0.00269342 3.09792 0.0319976 3.00856C0.0666886 2.9192 0.119251 2.84582 0.189684 2.78842C0.260117 2.73102 0.356481 2.69433 0.478775 2.67835L3.02804 2.47044L4.01358 0.293518C4.05738 0.195679 4.12536 0.122299 4.21752 0.0733794C4.30968 0.0244598 4.40376 0 4.49978 0C4.59579 0 4.68988 0.0244598 4.78203 0.0733794C4.87419 0.122299 4.94217 0.195679 4.98598 0.293518L5.97152 2.47044L8.52078 2.67835C8.64342 2.69466 8.73979 2.73135 8.80987 2.78842C8.87995 2.84549 8.93251 2.91887 8.96755 3.00856C9.0026 3.09825 9.00925 3.19005 8.98753 3.28398C8.9658 3.3779 8.91096 3.46139 8.82301 3.53445L6.89135 5.08764L7.46953 7.3991C7.49582 7.50509 7.48706 7.60097 7.44325 7.68675C7.39945 7.77252 7.33813 7.84378 7.25929 7.90052C7.18044 7.95727 7.08846 7.98988 6.98334 7.99836C6.87821 8.00684 6.77747 7.98238 6.6811 7.92498L4.49978 6.70199Z" 
-        fill="rgba(38, 183, 255, 0.92)" />
-    </svg>
-  `;
-
-  card.innerHTML = `
-    <div style="width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 16px;">
-      <img 
-        src="${video.thumbnail}" 
-        alt="Thumbnail" 
-        style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.2s;">
-    </div>
-    <div style="display: flex; align-items: flex-start; gap: 16px; margin-top: 16px;">
-      <img src="${video.channelThumbnail}" alt="Channel" style="border-radius: 50%; width: 60px; height: 60px;">
-      <div>
-        <div style="font-weight: bold; font-size: 24px; line-height: 1.4;">${video.title}</div>
-        <div style="color: #777; font-size: 18px;">${video.channel}</div>
-        <div style="color: #555; font-size: 18px; margin-top: 4px; display: flex; align-items: center;">
-          ${video.views} views · ${timeSince(video.publishedAt)} 
-        </div>
-      </div>
-    </div>
-  `;
-
-  // Hover effect only on thumbnail
-  const thumbnail = card.querySelector("img[alt='Thumbnail']") as HTMLImageElement;
-  if (thumbnail) {
-    card.onmouseenter = () => (thumbnail.style.transform = "scale(1.05)");
-    card.onmouseleave = () => (thumbnail.style.transform = "scale(1)");
-  }
-
-  const infoSection = card.querySelector("div > div > div:nth-child(3)");
-  if (infoSection) {
-    infoSection.appendChild(scoreBadge);
-  }
-
-  card.onclick = () => alert(`Navigate to video ${video.title}`);
-  return card;
-}
-
-
-
-function renderVideoGrid(videos: Video[]): void {
-  app.innerHTML = "";
-
-  const grid = document.createElement("div");
-  grid.style.display = "grid";
-  grid.style.gridTemplateColumns = "repeat(3, 1fr)";
-  grid.style.gap = "16px";
-  grid.style.marginTop = "20px";
-  grid.style.padding = "0 40px";
-  grid.style.width = "100%"; 
-  grid.style.maxWidth = "1600px"; 
-  grid.style.marginLeft = "auto";
-  grid.style.marginRight = "auto";
-
-
-  loadNextBatch(videos, grid);
-
-  const loadMoreButton = document.createElement("button");
-  loadMoreButton.innerText = "Load More";
-  loadMoreButton.style.padding = "24px 36px";
-  loadMoreButton.style.fontSize = "24px";
-  loadMoreButton.style.margin = "60px auto";
-  loadMoreButton.style.display = "block";
-  loadMoreButton.style.borderRadius = "16px";
-  loadMoreButton.style.border = "none";
-  loadMoreButton.style.backgroundColor = "#60a5fa";
-  loadMoreButton.style.color = "#fff";
-  loadMoreButton.style.cursor = "pointer";
-  loadMoreButton.onclick = () => loadNextBatch(videos, grid);
-
-  app.appendChild(grid);
-  app.appendChild(loadMoreButton);
-}
-
-function createTopLogo() {
-  const existingLogo = document.querySelector('img[alt="GemTube Logo"]');
-  if (existingLogo) return; // Prevent duplicate
-
-  const logo = document.createElement("img");
-  logo.src = "./assets/gemtube.webp";
-  logo.alt = "GemTube Logo";
-  logo.style.position = "fixed";
-  logo.style.top = "16px";
-  logo.style.left = "16px";
-  logo.style.width = "120px"; // This is now a king-size logo
-  logo.style.zIndex = "1000";
-  logo.style.cursor = "pointer";
-  logo.onclick = () => {
-    app.innerHTML = "";
-    loadedVideos = 0;
-    app.appendChild(createSearchSection());
-  };
-
-  document.body.appendChild(logo);
-}
-
-// Define video interface
-
+// Internal video model
 type Video = {
   id: number;
   title: string;
@@ -208,11 +28,101 @@ type Video = {
   publishedAt: Date;
 };
 
+// Root container
+const app = document.getElementById("app");
+if (!app) throw new Error("#app not found");
 
+// Top-left logo to go back
+function createTopLogo(): HTMLElement {
+  const logo = document.createElement("img");
+  logo.src = "./assets/gemtube.webp";
+  logo.alt = "GemTube Logo";
+  Object.assign(logo.style, {
+    position: "fixed",
+    top: "16px",
+    left: "16px",
+    width: "120px",
+    cursor: "pointer",
+    zIndex: "1000"
+  });
+  logo.onclick = () => location.reload();
+  return logo;
+}
 
+// Search homepage section
+function createSearchSection(): HTMLElement {
+  const container = document.createElement("div");
+  Object.assign(container.style, {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "100vh",
+    gap: "40px"
+  });
 
-function timeSince(date: Date): string {
-  const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+  // Big logo
+  const logo = document.createElement("img");
+  logo.src = "./assets/gemtube.webp";
+  logo.alt = "GemTube Logo";
+  logo.style.width = "600px";
+
+  // Search bar
+  const wrapper = document.createElement("div");
+  Object.assign(wrapper.style, { display: "flex", gap: "12px" });
+
+  const input = document.createElement("input");
+  Object.assign(input, { type: "text", placeholder: "What would you like to watch?" });
+  Object.assign(input.style, {
+    width: "400px",
+    padding: "12px 16px",
+    fontSize: "16px",
+    borderRadius: "8px",
+    border: "1px solid #ccc"
+  });
+
+  const btn = document.createElement("button");
+  btn.innerText = "Search";
+  Object.assign(btn.style, {
+    padding: "12px 20px",
+    fontSize: "16px",
+    borderRadius: "8px",
+    border: "none",
+    backgroundColor: "#60a5fa",
+    color: "#fff",
+    cursor: "pointer"
+  });
+  btn.onclick = () => handleSearch(input.value);
+
+  wrapper.append(input, btn);
+  container.append(logo, wrapper);
+  return container;
+}
+
+// Fetch videos from API
+async function fetchVideos(q: string): Promise<APIVideo[]> {
+  const res = await fetch(`/api/videos?query=${encodeURIComponent(q)}`);
+  if (!res.ok) throw new Error(`API ${res.status}`);
+  return res.json();
+}
+
+// Map API to internal models
+function mapVideos(items: APIVideo[]): Video[] {
+  return items.map((v, i) => ({
+    id: i + 1,
+    title: v.video_title,
+    channel: v.channel_name,
+    views: v.video_views,
+    score: v.video_score,
+    thumbnail: v.video_thumbnail_max || v.video_thumbnail_standard,
+    channelThumbnail: v.channel_avatar,
+    publishedAt: new Date(v.video_published_at)
+  }));
+}
+
+// Human-readable time since
+function timeSince(d: Date): string {
+  const s = Math.floor((Date.now() - d.getTime()) / 1e3);
   const intervals = [
     { label: 'year', value: 31536000 },
     { label: 'month', value: 2592000 },
@@ -221,53 +131,143 @@ function timeSince(date: Date): string {
     { label: 'minute', value: 60 },
     { label: 'second', value: 1 }
   ];
-
-  for (const interval of intervals) {
-    const count = Math.floor(seconds / interval.value);
-    if (count > 0) return `${count} ${interval.label}${count > 1 ? 's' : ''} ago`;
+  for (const i of intervals) {
+    const count = Math.floor(s / i.value);
+    if (count > 0) return `${count} ${i.label}${count > 1 ? 's' : ''} ago`;
   }
   return 'just now';
 }
 
-// Load videos progressively
-let loadedVideos = 0;
+// Create a video card
+function createVideoCard(video: Video): HTMLElement {
+  const card = document.createElement("div");
+  Object.assign(card.style, { width: "100%", cursor: "pointer", fontFamily: "Arial, sans-serif" });
 
-function loadNextBatch(videos: Video[], grid: HTMLElement): void {
-  const nextBatch = videos.slice(loadedVideos, loadedVideos + 21);
-  nextBatch.forEach((video) => {
-    grid.appendChild(createVideoCard(video));
+  // Thumbnail container
+  const thumb = document.createElement("div");
+  Object.assign(thumb.style, {
+    width: "100%",
+    aspectRatio: "16/9",
+    overflow: "hidden",
+    borderRadius: "12px",
+    marginBottom: "12px" // breathing room below title container
   });
-  loadedVideos += 21;
+  const img = document.createElement("img");
+  img.src = video.thumbnail;
+  img.alt = video.title;
+  Object.assign(img.style, { width: "100%", height: "100%", objectFit: "cover", transition: "transform .2s" });
+  thumb.append(img);
+
+  // Info section
+  const info = document.createElement("div");
+  info.style.fontFamily = "Arial, sans-serif";
+  info.innerHTML = `
+    <strong style="font-size:18px; display:block; margin-bottom:6px;">${video.title}</strong>
+    <small style="color:#777">${video.channel}</small><br>
+    <small style="color:#555">${video.views} views · ${timeSince(video.publishedAt)}</small>
+  `;
+
+  // Score badge with star
+  const badge = document.createElement("span");
+  badge.textContent = video.score.toFixed(2);
+  Object.assign(badge.style, {
+    marginLeft: "6px",
+    background: "#e0e0e0",
+    borderRadius: "9999px",
+    padding: "2px 6px",
+    fontSize: "12px",
+    fontWeight: "600",
+    display: "inline-flex",
+    alignItems: "center"
+  });
+  
+  // star icon
+  const star = document.createElement("img");
+  star.src = "./assets/small_star.png";
+  star.alt = "star";
+  Object.assign(star.style, {
+    width: "10px",
+    height: "10px",
+    marginLeft: "4px",
+    verticalAlign: "middle"
+  });
+  badge.append(star);
+
+  info.querySelector("small:last-child")!.appendChild(badge);
+
+  // Hover zoom
+  card.addEventListener("mouseenter", () => img.style.transform = "scale(1.05)");
+  card.addEventListener("mouseleave", () => img.style.transform = "scale(1)");
+
+  card.append(thumb, info);
+  return card;
 }
 
-// Handle search (for now just load mock videos)
-async function handleSearch(query: string): Promise<void> {
-  loadedVideos = 0;
+// Render results with top padding and mini search with top padding and mini search
+function renderVideoGrid(videos: Video[]) {
+  app.innerHTML = "";
 
+  // Back logo only
+  app.append(createTopLogo());
+
+  // Mini search above grid
+  const mini = document.createElement("div");
+  Object.assign(mini.style, { display: "flex", justifyContent: "center", margin: "16px 80px" });
+  const input = document.createElement("input");
+  Object.assign(input, { type: "text", placeholder: "Search again…" });
+  Object.assign(input.style, { width: "300px", padding: "8px 12px", fontSize: "14px", borderRadius: "6px", border: "1px solid #ccc" });
+  const btn2 = document.createElement("button");
+  btn2.innerText = "Search";
+  Object.assign(btn2.style, { marginLeft: "8px", padding: "8px 12px", fontSize: "14px", borderRadius: "6px", border: "none", backgroundColor: "#60a5fa", color: "#fff", cursor: "pointer" });
+  btn2.onclick = () => handleSearch(input.value);
+  mini.append(input, btn2);
+  app.append(mini);
+
+  // Grid with extra top padding
+  const grid = document.createElement("div");
+  Object.assign(grid.style, {
+    display: "grid",
+    gridTemplateColumns: "repeat(3,1fr)",
+    gap: "16px",
+    padding: "40px 80px 24px"
+  });
+
+  let idx = 0;
+  const batch = 9;
+  const loadNext = () => {
+    videos.slice(idx, idx + batch).forEach(v => grid.append(createVideoCard(v)));
+    idx += batch;
+    if (idx >= videos.length) loadBtn.style.display = "none";
+  };
+
+  const loadBtn = document.createElement("button");
+  loadBtn.innerText = "Load More";
+  Object.assign(loadBtn.style, {
+    display: "block",
+    margin: "16px auto",
+    padding: "12px 24px",
+    backgroundColor: "#60a5fa",
+    color: "#fff",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer"
+  });
+  loadBtn.onclick = loadNext;
+
+  app.append(grid, loadBtn);
+  loadNext();
+}
+
+// Search handler
+async function handleSearch(query: string) {
+  if (!query.trim()) return;
   try {
-    const response = await fetch(`/api/videos?query=${encodeURIComponent(query)}`);
-    if (!response.ok) throw new Error("API request failed.");
-
-    const apiVideos = await response.json();
-
-    const videos: Video[] = apiVideos.map((v: any, index: number) => ({
-      id: index + 1,
-      title: v.video_title,
-      channel: v.channel_name,
-      views: `${v.video_views}`,
-      score: v.video_score,
-      thumbnail: v.video_thumbnail_max || v.video_thumbnail_standard,
-      channelThumbnail: v.channel_avatar,
-      publishedAt: new Date(v.video_published_at),
-    }));
-
-    renderVideoGrid(videos);
-    createTopLogo();
-  } catch (err) {
-    console.error("Failed to fetch videos:", err);
-    app.innerHTML = `<p style="font-size: 24px;">No gems found for "${query}".</p>`;
+    const data = await fetchVideos(query);
+    renderVideoGrid(mapVideos(data));
+  } catch (e) {
+    app.innerHTML = `<p style='text-align:center;font-size:18px;'>No gems for "${query}".</p>`;
   }
 }
 
-// Initial Render
-app.appendChild(createSearchSection());
+// Mount initial homepage
+app.append(createSearchSection());

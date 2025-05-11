@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"sort"
 	"strings"
 )
 
@@ -124,7 +125,13 @@ func runFiltering(query string) []Video {
 		break
 	}
 
+	// sort filteredREsults by score from highest to lowest
+	sort.SliceStable(filteredResults, func(i, j int) bool {
+		return filteredResults[i].Score > filteredResults[j].Score
+	})
+
 	log.Printf("Filtering complete. %d videos ready.\n", len(filteredResults))
+	fmt.Printf("Filtering complete. %d videos ready.\n", len(filteredResults))
 	return filteredResults
 }
 

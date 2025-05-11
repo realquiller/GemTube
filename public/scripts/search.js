@@ -1,16 +1,10 @@
 // public/scripts/api.js
 
 async function fetchVideos(query) {
-    const url = `/api/videos?query=${encodeURIComponent(query)}`;
-    try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error("Failed to fetch videos.");
-        const videos = await response.json();
-        return videos;
-    } catch (error) {
-        console.error("Error fetching videos:", error);
-        return [];
-    }
+  const url = `/api/videos?query=${encodeURIComponent(query)}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`API returned ${res.status}`);
+  return res.json();
 }
 
 function createVideoCard(video) {
@@ -44,3 +38,32 @@ async function handleSearch() {
         resultsContainer.innerHTML += createVideoCard(video);
     });
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("search-form");
+  const input = document.getElementById("search-input");
+  const resultsDiv = document.getElementById("results");
+
+  form.addEventListener("submit", async (e) => {
+    console.log("🖱️ Search button clicked");
+    e.preventDefault();              // 🚨 stop the redirect
+    const query = input.value.trim();
+    if (!query) return;
+
+    resultsDiv.innerHTML = "<p>Loading…</p>";
+    try {
+      const videos = await fetchVideos(query); // from api.js
+      if (videos.length === 0) {
+        resultsDiv.innerHTML = "<p>No gems found. Try another query!</p>";
+      } else {
+        // render cards
+        resultsDiv.innerHTML = videos
+          .map(createVideoCard)
+          .join("");
+      }
+    } catch (err) {
+      console.error(err);
+      resultsDiv.innerHTML = "<p>Uh oh—something went wrong.</p>";
+    }
+  });
+});

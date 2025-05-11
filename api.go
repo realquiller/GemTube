@@ -12,20 +12,7 @@ import (
 	"time"
 
 	"github.com/nleeper/goment"
-	"github.com/pemistahl/lingua-go"
 )
-
-var languageDetector = lingua.NewLanguageDetectorBuilder().
-	FromLanguages(
-		lingua.English,
-		lingua.Spanish,
-		lingua.French,
-		lingua.Portuguese,
-		lingua.Dutch,
-		lingua.German,
-		lingua.Italian,
-	).
-	Build()
 
 func getSearchResults(query, nextPageToken string, seenVideos map[string]bool) ([]SearchResult, string, error) {
 	baseURL := fmt.Sprintf("https://www.googleapis.com/youtube/v3/search?part=snippet&q=%s&type=video&maxResults=%d&key=%s",
@@ -145,13 +132,13 @@ func filterVideos(videoIDs string) ([]Video, error) {
 			continue
 		}
 
-		titleLang, titleOk := languageDetector.DetectLanguageOf(video.Title)
-		descLang, descOk := languageDetector.DetectLanguageOf(video.Description)
+		// normalize languages to lowercase
+		lang := strings.ToLower(video.DefaultLanguage)
+		audio := strings.ToLower(video.DefaultAudioLanguage)
 
-		// Skip only if Title is confidently non-English AND (Description is confidently non-English OR empty)
-		if titleOk && titleLang != lingua.English && (!descOk || (descOk && descLang != lingua.English)) {
-			log.Printf("video: %s skipped (%s) - detected non-English language", video.ID, video.Title)
-			fmt.Println("skipping - detected non-English language in title and unclear/foreign description")
+		// if neither contains "en", skip this video
+		if !(strings.Contains(lang, "en") || strings.Contains(audio, "en")) {
+			fmt.Printf("skipping %s: defaultLang=%q, audioLang=%q\n", video.ID, video.DefaultLanguage, video.DefaultAudioLanguage)
 			continue
 		}
 

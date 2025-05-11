@@ -3,8 +3,8 @@ package main
 import "net/http"
 
 const (
-    defaultMaxResults    = 50
-    defaultTargetResults = 21
+	defaultMaxResults    = 50
+	defaultTargetResults = 21
 )
 
 var (

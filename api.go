@@ -27,9 +27,9 @@ var languageDetector = lingua.NewLanguageDetectorBuilder().
 	).
 	Build()
 
-func getSearchResults(nextPageToken string) ([]SearchResult, string, error) {
+func getSearchResults(query, nextPageToken string, seenVideos map[string]bool) ([]SearchResult, string, error) {
 	baseURL := fmt.Sprintf("https://www.googleapis.com/youtube/v3/search?part=snippet&q=%s&type=video&maxResults=%d&key=%s",
-		strings.ReplaceAll(searchQuery, " ", "+"),
+		strings.ReplaceAll(query, " ", "+"),
 		maxResults,
 		ytbApiKey,
 	)

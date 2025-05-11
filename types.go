@@ -85,47 +85,47 @@ type SearchResult struct {
 
 type Video struct {
 	// Identity
-	ID          string
-	Title       string
-	Description string
-	Tags        []string
-	PublishedAt time.Time
-	CategoryID  string
+	ID          string    `json:"video_id"`
+	Title       string    `json:"video_title"`
+	Description string    `json:"video_desc"`
+	Tags        []string  `json:"video_tags"`
+	PublishedAt time.Time `json:"video_published_at"`
+	CategoryID  string    `json:"video_category_id"`
 
 	// Channel Info
-	ChannelID            string
-	ChannelTitle         string
-	ChannelAvatarURL     string
-	DefaultLanguage      string
-	DefaultAudioLanguage string
+	ChannelID            string `json:"channel_id"`
+	ChannelTitle         string `json:"channel_name"`
+	ChannelAvatarURL     string `json:"channel_avatar"`
+	DefaultLanguage      string `json:"channel_default_language"`
+	DefaultAudioLanguage string `json:"channel_default_audio_language"`
 
 	// Engagement Metrics
-	ViewCount    string
-	LikeCount    string
-	CommentCount string
+	ViewCount    string `json:"video_views"`
+	LikeCount    string `json:"video_likes"`
+	CommentCount string `json:"video_comments"`
 
 	// Visual Info
-	ThumbnailURL_Standard string
-	ThumbnailURL_Max      string
-	HasCustomThumbnail    bool
-	Embeddable            bool
+	ThumbnailURL_Standard string `json:"video_thumbnail_standard"`
+	ThumbnailURL_Max      string `json:"video_thumbnail_max"`
+	HasCustomThumbnail    bool   `json:"has_custom_thumbnail"`
+	Embeddable            bool   `json:"embeddable"`
 
 	// Video Format / Meta
-	Duration    string
-	Definition  string
-	MadeForKids bool
+	Duration    string `json:"video_duration"`
+	Definition  string `json:"video_definition"`
+	MadeForKids bool   `json:"video_made_for_kids"`
 
 	// Region / Legal / Distribution
-	RegionRestriction       []string
-	HasPaidProductPlacement bool
+	RegionRestriction       []string `json:"region_restriction"`
+	HasPaidProductPlacement bool     `json:"has_paid_product_placement"`
 
 	// Topics / Categorization
-	TopicIds         []string
-	RelevantTopicIds []string
-	TopicCategories  []string
+	TopicIds         []string `json:"topic_ids"`
+	RelevantTopicIds []string `json:"relevant_topic_ids"`
+	TopicCategories  []string `json:"topic_categories"`
 
 	// Score
-	Score float64
+	Score float64 `json:"video_score"`
 }
 
 type VideoScore struct {

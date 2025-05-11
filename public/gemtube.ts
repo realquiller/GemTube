@@ -208,17 +208,7 @@ type Video = {
   publishedAt: Date;
 };
 
-// Sample video data for testing
-const videosMock: Video[] = Array.from({ length: 100 }, (_, i) => ({
-  id: i + 1,
-  title: `Gem Video ${i + 1}`,
-  channel: `Creator ${i + 1}`,
-  views: `${(Math.random() * 100).toFixed(1)}K`,
-  score: +(Math.random() * 5).toFixed(1),
-  thumbnail: "https://placehold.co/480x270?text=Thumbnail",
-  channelThumbnail: "https://placehold.co/60x60?text=Avatar&font=roboto",
-  publishedAt: new Date(Date.now() - Math.random() * 1000 * 60 * 60 * 24 * 365), // Random past date up to 1 year ago
-}));
+
 
 
 function timeSince(date: Date): string {
@@ -251,10 +241,32 @@ function loadNextBatch(videos: Video[], grid: HTMLElement): void {
 }
 
 // Handle search (for now just load mock videos)
-function handleSearch(query: string): void {
+async function handleSearch(query: string): Promise<void> {
   loadedVideos = 0;
-  renderVideoGrid(videosMock);
-  createTopLogo();
+
+  try {
+    const response = await fetch(`/api/videos?query=${encodeURIComponent(query)}`);
+    if (!response.ok) throw new Error("API request failed.");
+
+    const apiVideos = await response.json();
+
+    const videos: Video[] = apiVideos.map((v: any, index: number) => ({
+      id: index + 1,
+      title: v.video_title,
+      channel: v.channel_name,
+      views: `${v.video_views}`,
+      score: v.video_score,
+      thumbnail: v.video_thumbnail_max || v.video_thumbnail_standard,
+      channelThumbnail: v.channel_avatar,
+      publishedAt: new Date(v.video_published_at),
+    }));
+
+    renderVideoGrid(videos);
+    createTopLogo();
+  } catch (err) {
+    console.error("Failed to fetch videos:", err);
+    app.innerHTML = `<p style="font-size: 24px;">No gems found for "${query}".</p>`;
+  }
 }
 
 // Initial Render

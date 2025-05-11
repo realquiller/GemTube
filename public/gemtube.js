@@ -1,4 +1,13 @@
 // Updated for balanced layout, light/dark mode toggle, and perfect 16:9 thumbnails
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 const app = document.getElementById("app");
 let isDarkMode = true;
 function toggleTheme() {
@@ -165,17 +174,6 @@ function createTopLogo() {
     };
     document.body.appendChild(logo);
 }
-// Sample video data for testing
-const videosMock = Array.from({ length: 100 }, (_, i) => ({
-    id: i + 1,
-    title: `Gem Video ${i + 1}`,
-    channel: `Creator ${i + 1}`,
-    views: `${(Math.random() * 100).toFixed(1)}K`,
-    score: +(Math.random() * 5).toFixed(1),
-    thumbnail: "https://placehold.co/480x270?text=Thumbnail",
-    channelThumbnail: "https://placehold.co/60x60?text=Avatar&font=roboto",
-    publishedAt: new Date(Date.now() - Math.random() * 1000 * 60 * 60 * 24 * 365), // Random past date up to 1 year ago
-}));
 function timeSince(date) {
     const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
     const intervals = [
@@ -204,9 +202,31 @@ function loadNextBatch(videos, grid) {
 }
 // Handle search (for now just load mock videos)
 function handleSearch(query) {
-    loadedVideos = 0;
-    renderVideoGrid(videosMock);
-    createTopLogo();
+    return __awaiter(this, void 0, void 0, function* () {
+        loadedVideos = 0;
+        try {
+            const response = yield fetch(`/api/videos?query=${encodeURIComponent(query)}`);
+            if (!response.ok)
+                throw new Error("API request failed.");
+            const apiVideos = yield response.json();
+            const videos = apiVideos.map((v, index) => ({
+                id: index + 1,
+                title: v.video_title,
+                channel: v.channel_name,
+                views: `${v.video_views}`,
+                score: v.video_score,
+                thumbnail: v.video_thumbnail_max || v.video_thumbnail_standard,
+                channelThumbnail: v.channel_avatar,
+                publishedAt: new Date(v.video_published_at),
+            }));
+            renderVideoGrid(videos);
+            createTopLogo();
+        }
+        catch (err) {
+            console.error("Failed to fetch videos:", err);
+            app.innerHTML = `<p style="font-size: 24px;">No gems found for "${query}".</p>`;
+        }
+    });
 }
 // Initial Render
 app.appendChild(createSearchSection());

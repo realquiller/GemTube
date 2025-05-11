@@ -95,6 +95,7 @@ type Video struct {
 	// Channel Info
 	ChannelID            string
 	ChannelTitle         string
+	ChannelAvatarURL     string
 	DefaultLanguage      string
 	DefaultAudioLanguage string
 

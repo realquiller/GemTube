@@ -219,13 +219,20 @@ func filterBigBoys(results []Video) ([]Video, error) {
 
 	queryString := strings.Join(channelIDs, ",")
 
-	ytbQuery := fmt.Sprintf("https://www.googleapis.com/youtube/v3/channels?part=statistics&id=%s&key=%s", queryString, ytbApiKey)
+	ytbQuery := fmt.Sprintf("https://www.googleapis.com/youtube/v3/channels?part=statistics,snippet&id=%s&key=%s", queryString, ytbApiKey)
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	type youtubeAPIResponse_Channels struct {
 		Items []struct {
-			Id         string `json:"id"`
+			Id      string `json:"id"`
+			Snippet struct {
+				Thumbnails struct {
+					Default struct {
+						URL string `json:"url"`
+					} `json:"default"`
+				} `json:"thumbnails"`
+			} `json:"snippet"`
 			Statistics struct {
 				SubscriberCount string `json:"subscriberCount"`
 			} `json:"statistics"`
@@ -239,8 +246,10 @@ func filterBigBoys(results []Video) ([]Video, error) {
 
 	fmt.Printf("YouTube API returned %d channels\n", len(ytResp.Items))
 
-	// Map channelID -> subscriber count
+	// Map channelID -> subscriber count and avatar URL
 	subscribersMap := make(map[string]uint64)
+	avatarURLMap := make(map[string]string)
+
 	for _, item := range ytResp.Items {
 		subs, err := strconv.ParseUint(item.Statistics.SubscriberCount, 10, 64)
 		if err != nil {
@@ -248,12 +257,17 @@ func filterBigBoys(results []Video) ([]Video, error) {
 			continue
 		}
 		subscribersMap[item.Id] = subs
+
+		// Save the avatar URL (choose higher resolution if needed)
+		avatarURLMap[item.Id] = item.Snippet.Thumbnails.Default.URL
 	}
 
 	var filtered []Video
 	for _, video := range results {
 		subs := subscribersMap[video.ChannelID]
 		if subs <= 20000 {
+			// Inject the avatar URL directly into the struct
+			video.ChannelAvatarURL = avatarURLMap[video.ChannelID]
 			filtered = append(filtered, video)
 		} else {
 			fmt.Printf("skipping video because channel %s has %d subscribers\n", video.ChannelTitle, subs)

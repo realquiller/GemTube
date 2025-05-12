@@ -23,7 +23,7 @@ Built as a lightweight web app paired with a powerful CLI tool, GemTube dives de
 A discovery platform focused on finding high‑quality gaming videos from small creators (≤ 20K subs).
 GemTube filters out the noise: no sponsor-shilled content, no kid-focused nonsense, and definitely no low-effort reaction filler.
 
-You can explore GemTube through:
+You can explore **GemTube** through:
 
 - 🌐 **Web App** *(Go-powered API)* – Search and binge directly in your browser with a slick responsive layout.
 - 🛠 **CLI Tool** – Get fast, clean results right in your terminal. *Hackerman mode.*

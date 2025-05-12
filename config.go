@@ -1,6 +1,9 @@
 package main
 
-import "net/http"
+import (
+	"errors"
+	"net/http"
+)
 
 const (
 	defaultMaxResults    = 50
@@ -8,8 +11,9 @@ const (
 )
 
 var (
-	ytbApiKey     string
-	maxResults    int
-	targetResults int
-	httpClient    *http.Client
+	ytbApiKey        string
+	maxResults       int
+	targetResults    int
+	httpClient       *http.Client
+	ErrQuotaExceeded = errors.New("quota exceeded")
 )

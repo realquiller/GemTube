@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -141,9 +142,12 @@ func videosHandler(w http.ResponseWriter, r *http.Request) {
 
 	// 1) If there's an "id" param, return that one video
 	if id := r.URL.Query().Get("id"); id != "" {
-		// filterVideos takes a comma-separated list of videoIDs
 		vids, err := filterVideos(id)
-		if err != nil || len(vids) == 0 {
+		if err != nil {
+			if errors.Is(err, ErrQuotaExceeded) {
+				http.Error(w, "quotaExceeded", http.StatusForbidden)
+				return
+			}
 			http.Error(w, "Video not found", http.StatusNotFound)
 			return
 		}
@@ -151,16 +155,26 @@ func videosHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// 2) Otherwise fall back to your existing search-by-query
+	// 2) Fall back to search-by-query
 	query := r.URL.Query().Get("query")
 	if query == "" {
 		http.Error(w, "Missing 'query' parameter", http.StatusBadRequest)
 		return
 	}
-	results := runFiltering(query)
+
+	results, err := filterVideos(query)
+	if err != nil {
+		if errors.Is(err, ErrQuotaExceeded) {
+			http.Error(w, "quotaExceeded", http.StatusForbidden)
+			return
+		}
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
 	if len(results) == 0 {
 		http.Error(w, "No videos found for the given query.", http.StatusNotFound)
 		return
 	}
+
 	json.NewEncoder(w).Encode(results)
 }

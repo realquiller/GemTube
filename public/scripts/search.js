@@ -1,9 +1,16 @@
-// public/scripts/api.js
+// public/scripts/search.js
 
 async function fetchVideos(query) {
   const url = `/api/videos?query=${encodeURIComponent(query)}`;
   const res = await fetch(url);
-  if (!res.ok) throw new Error(`API returned ${res.status}`);
+  if (!res.ok) {
+    // YouTube/API quota limits often return 403 Forbidden or 429 Too Many Requests
+    if (res.status === 429 || res.status === 403) {
+      // throw a special error we can detect downstream
+      throw new Error("API_QUOTA_EXCEEDED");
+    }
+    throw new Error(`API returned ${res.status}`);
+  }
   return res.json();
 }
 
@@ -21,22 +28,31 @@ function createVideoCard(video) {
 }
 
 async function handleSearch() {
-    const searchInput = document.getElementById("search-input");
-    const query = searchInput.value.trim();
-    if (!query) return;
+  const searchInput = document.getElementById("search-input");
+  const query = searchInput.value.trim();
+  if (!query) return;
 
+  const resultsContainer = document.getElementById("results");
+  resultsContainer.innerHTML = "";
+
+  try {
     const videos = await fetchVideos(query);
-    const resultsContainer = document.getElementById("results");
-    resultsContainer.innerHTML = "";
-
     if (videos.length === 0) {
-        resultsContainer.innerHTML = "<p>No gems found. Try a different query!</p>";
-        return;
+      resultsContainer.innerHTML = "<p>No gems found. Try a different query!</p>";
+      return;
     }
-
     videos.forEach(video => {
-        resultsContainer.innerHTML += createVideoCard(video);
+      resultsContainer.innerHTML += createVideoCard(video);
     });
+  } catch (err) {
+    console.error(err);
+    if (err.message === "API_QUOTA_EXCEEDED") {
+      resultsContainer.innerHTML =
+        "<p>You’ve reached your daily API quota. Please try again tomorrow.</p>";
+    } else {
+      resultsContainer.innerHTML = "<p>Uh oh—something went wrong.</p>";
+    }
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {

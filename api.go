@@ -292,7 +292,13 @@ func fetchJSON(ctx context.Context, url string, target any) error {
 		return fmt.Errorf("error reading response: %w", err)
 	}
 
-	if res.StatusCode != 200 {
+	switch res.StatusCode {
+	case http.StatusOK:
+		// fine
+	case http.StatusForbidden: // 403
+		// YouTube API uses 403 for both forbidden and quotaExceeded;
+		return ErrQuotaExceeded
+	default:
 		return fmt.Errorf("non-200 response: %d\n%s", res.StatusCode, string(data))
 	}
 

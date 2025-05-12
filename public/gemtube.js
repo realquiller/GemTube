@@ -55,7 +55,8 @@ function createSearchSection() {
     const wrapper = document.createElement("div");
     Object.assign(wrapper.style, { display: "flex", gap: "12px" });
     const input = document.createElement("input");
-    Object.assign(input, { type: "text", placeholder: "What would you like to watch?" });
+    input.type = "text";
+    input.placeholder = "What would you like to watch?";
     Object.assign(input.style, {
         width: "400px",
         padding: "12px 16px",
@@ -74,7 +75,14 @@ function createSearchSection() {
         color: "#fff",
         cursor: "pointer"
     });
-    btn.onclick = () => handleSearch(input.value);
+    // Click runs the search runner directly
+    btn.addEventListener("click", () => handleSearch(input.value));
+    input.addEventListener("keydown", e => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            handleSearch(input.value);
+        }
+    });
     wrapper.append(input, btn);
     container.append(logo, wrapper);
     return container;
@@ -83,8 +91,17 @@ function createSearchSection() {
 function fetchVideos(q) {
     return __awaiter(this, void 0, void 0, function* () {
         const res = yield fetch(`/api/videos?query=${encodeURIComponent(q)}`);
-        if (!res.ok)
-            throw new Error(`API ${res.status}`);
+        // if our Go server ever returns 403, assume quotaExceeded
+        if (res.status === 403) {
+            throw new Error("YOUTUBE_QUOTA_EXCEEDED");
+        }
+        // still treat 404 (no results) specially
+        if (res.status === 404) {
+            return [];
+        }
+        if (!res.ok) {
+            throw new Error(`API_ERROR_${res.status}`);
+        }
         return res.json();
     });
 }
@@ -244,10 +261,26 @@ function handleSearch(query) {
             return;
         try {
             const data = yield fetchVideos(query);
+            if (data.length === 0) {
+                app.innerHTML = `<p style="text-align:center;font-size:18px;">
+        No gems found for “${query}.”
+      </p>`;
+                return;
+            }
             renderVideoGrid(mapVideos(data));
         }
         catch (e) {
-            app.innerHTML = `<p style='text-align:center;font-size:18px;'>No gems for "${query}".</p>`;
+            if (e instanceof Error && e.message === "YOUTUBE_QUOTA_EXCEEDED") {
+                app.innerHTML = `<p style="text-align:center;font-size:18px;">
+        You’ve exceeded your YouTube API quota for today. Please try again tomorrow!
+      </p>`;
+            }
+            else {
+                console.error(e);
+                app.innerHTML = `<p style="text-align:center;font-size:18px;">
+        Uh oh—something went wrong.
+      </p>`;
+            }
         }
     });
 }

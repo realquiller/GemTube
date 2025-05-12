@@ -141,6 +141,12 @@ function init() {
             // point back at index.html so it loads the SPA home with ?query=
             window.location.href = `index.html?query=${encodeURIComponent(q)}`;
         });
+        miniInput.addEventListener("keydown", e => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                miniBtn.click();
+            }
+        });
     });
 }
 document.addEventListener('DOMContentLoaded', init);

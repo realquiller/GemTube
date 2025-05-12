@@ -6,8 +6,8 @@ import (
 )
 
 const (
-	defaultMaxResults    = 50
-	defaultTargetResults = 2
+	defaultMaxResults    = 50 // the more the better, 50 is max
+	defaultTargetResults = 21 // this value is typical for current Youtube home feed, tweak it however you want
 )
 
 var (

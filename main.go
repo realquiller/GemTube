@@ -50,7 +50,7 @@ func setupFlags() string {
 	var query string
 	flag.StringVar(&query, "query", "oblivion+remastered+patches", "Search query for Youtube")
 	flag.IntVar(&maxResults, "maxResults", defaultMaxResults,
-		"max videos per YouTube search (max 500)")
+		"max videos per YouTube search (max 50)")
 	flag.IntVar(&targetResults, "targetResults", defaultTargetResults,
 		"how many “gems” you’ll keep/display")
 	flag.Parse()

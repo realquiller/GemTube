@@ -159,6 +159,13 @@ Get the finest gems without leaving your terminal—Hackerman vibes fully unlock
 
 > *Note: Roadmap may depend on how generous (or stingy) Google’s API quotas feel.*
 
+## 🤝 Contributing
+While this project was built as a personal capstone, contributions are welcome!  
+Feel free to open issues, suggest improvements, or submit a pull request.  
+If you find a hidden gem or want to improve the discovery algorithm—jump in!
+
+> 💡 Tip: Make sure your changes don’t break both CLI and API modes.
+
 ## 📜 License
 Released under the MIT License.
 Fork it, break it, fix it, improve it, just toss a star ⭐ if it makes your day!

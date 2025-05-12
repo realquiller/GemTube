@@ -17,6 +17,7 @@ Built as a lightweight web app paired with a powerful CLI tool, GemTube dives de
   - [CLI Mode](#-cli-mode)
 - [Struggles & Learnings](#-struggles--learnings)
 - [Future Roadmap](#-future-roadmap)
+- [Contributing](#-contributing)
 - [License](#-license)
 
 ## 💡 What is GemTube?

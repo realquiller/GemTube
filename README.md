@@ -1,4 +1,4 @@
-# 💎 GemTube – Hunt Down Hidden YouTube Gaming Gems!
+# 💎 GemTube – Hidden YouTube Gaming Gems!
 Tired of YouTube recommending the same stale content on repeat?
 Welcome to GemTube, your personal treasure hunter for high-quality gaming content from small creators.
 
@@ -11,12 +11,13 @@ Built as a lightweight web app paired with a powerful CLI tool, GemTube dives de
 - [Who is it for?](#who-is-it-for)
 - [Requirements](#requirements)
 - [Features](#features)
+- [Example Screenshots](#example-screenshots)
 - [Installation & Usage](#installation--usage)
-  - [🌍 Web (API Mode)](#-web-api-mode)
-  - [💻 CLI Mode](#-cli-mode)
-- [🔥 Struggles & Learnings](#-struggles--learnings)
-- [🚀 Future Roadmap](#-future-roadmap)
-- [📜 License](#-license)
+  - [Web (API Mode)](#-web-api-mode)
+  - [CLI Mode](#-cli-mode)
+- [Struggles & Learnings](#-struggles--learnings)
+- [Future Roadmap](#-future-roadmap)
+- [License](#-license)
 
 ## 💡 What is GemTube?
 A discovery platform focused on finding high‑quality gaming videos from small creators (≤ 20K subs).
@@ -106,9 +107,9 @@ go run main.go
 ```
 Now head over to http://localhost:8080, type your favorite game, and let the gems roll in!
 
-💡 **Advanced Tip:**  
-Want to tweak the default search behavior?  
-You can adjust `maxResults` and `targetResults` directly in `config.go` for API mode to fine-tune how deep GemTube digs for you.
+> 💡 **Advanced Tip:**  
+> Want to tweak the default search behavior?  
+> You can adjust `maxResults` and `targetResults` directly in `config.go` for API mode to fine-tune how deep GemTube digs for you.
 
 ### 💻 CLI Mode
 ```
@@ -132,24 +133,31 @@ Get the finest gems without leaving your terminal—Hackerman vibes fully unlock
 ## 🧩 Struggles & Learnings
 - **Backend Battles**:
   Wrestled with YouTube API quotas, nested API calls, and unresolved quota errors. But hey, that’s how you learn robust error handling, right?
+
 - **Frontend Adventures**:
   Came in with zero real frontend experience and thought, “How hard can it be?” Well… after about 300 ChatGPT prompts and endless retries, I found out. 😅
   But through the chaos, I learned how to actually wire things up, connect backend APIs to the frontend, and realized that TypeScript isn’t magic, it still needs to be compiled into JavaScript before the browser understands it.
   This project didn’t just teach me how to fight the DOM directly with Vanilla JS—it gave me a solid reason to learn plain JavaScript properly before diving deeper into frontend frameworks.
+
 - **UX/UI Revelations**:
   My first time using Figma in programming project. Spacing, typography, and accessibility? Turns out they’re kind of a big deal.
+
 - **Keeping Sane**:
   Managed API & CLI modes in one codebase, dealt with caching hell, and figured out a smooth workflow between the two worlds.
 
 ## 🗺 Future Roadmap
 - **📚 Discovery Modes**:
   Add new filters like “best of big channels” based on view/sub ratios.
+
 - **❤️ User Feedback & Favorites**:
   Like/gem buttons with personalized recommendations (backed by a lightweight DB).
+
 - **🔌 Browser Extension**:
   Instant gem recommendations right on YouTube.
+
 - **👤 User Profiles & Auth**:
   Save your favorite gems and build your personal collection.
+  
 - **🌙 Dark Mode Toggle**:
   Because it’s practically a human right at this point.
 

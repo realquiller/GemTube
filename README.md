@@ -88,7 +88,7 @@ MODE=CLI
 ### Feed Page  
 ![Feed Page](docs/feed_page.png)
 
-## Video Page  
+### Video Page  
 ![Video Page](docs/video_page.png)
 
 ## 🚀 Installation & Usage

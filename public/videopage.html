@@ -1,149 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GemTube - Watch</title>
-    <link rel="stylesheet" href="styles/videopage.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GemTube – Watch</title>
+    <link rel="stylesheet" href="styles/videopage.css" />
 </head>
 <body>
-    <!-- Header Bar -->
+  <!-- Header Bar -->
     <header>
-        <img src="./assets/gemtube.webp" alt="GemTube Logo" class="logo">
+        <img
+            src="./assets/gemtube.webp"
+            class="logo"
+            onclick="location.href='/'"
+        />
+
         <div class="search-bar-wrapper">
-            <input type="text" placeholder="Search..." class="search-bar">
+            <input
+            id="mini-search-input"
+            class="search-bar"
+            type="text"
+            placeholder="Search…"
+            />
+            <button
+            id="mini-search-btn"
+            class="search-btn"
+            >🔍</button>
         </div>
     </header>
 
     <!-- Main Video Section -->
     <main>
-         <div class="content-wrapper">
-            <section class="video-section">
-                <div class="video-player">
-                    <div class="thumbnail-placeholder">Video</div>
-                    <div class="video-overlay">▶ Play</div>
-                </div>
-                <h1 class="video-title">Gem Title</h1>
-                <div class="channel-info-wrapper">
-                    <div class="channel-info">
-                        <div class="avatar-placeholder">Avatar</div>
-                        <div>
-                            <p class="channel-name">Channel Name</p>
-                            <p class="subscribers">XXX subscribers</p>
-                        </div>
-                    </div>
-                    <div class="engagement-bar">
-                        <button class="like-btn">👍 XXX</button>
-                        <button class="dislike-btn">👎</button>
-                        <button class="share-btn">🔗 Share</button>
-                    </div>
-                </div>
-                <div class="description">
-                    <p>XXX views • XXX Y/M/D ago</p>
-                    <p class="desc-text">This is a sample description for the video. It will be replaced later via TypeScript logic. <span class="more">...more</span></p>
-                </div>
+    <div class="content-wrapper">
+        <section class="video-section">
+        <div class="video-player"><!-- JS will populate this --></div>
 
-                <!-- Category Section Placeholder -->
-                <div class="category-section">
-                    <div class="category-card">
-                        🎮 Videogame Name
-                        <p class="year">Year</p>
-                        <a href="#">Browse Game ></a>
-                    </div>
-                    <div class="category-card">
-                        📚 Gaming
-                        <a href="#">Browse All Gaming ></a>
-                    </div>
-                </div>
-                <!-- Comments Section -->
-                <section class="comments-section">
-                    <h2>XXX Comments</h2>
-                    <div class="comment">
-                        <div class="avatar-placeholder">Avatar</div>
-                        <div>
-                            <p><strong>@username</strong> • X Y/M/D ago</p>
-                            <p>Sample comment text here...</p>
-                            <a href="#" class="replies-link">XXX replies</a>
-                        </div>
-                    </div>
-                    <!-- Repeat for more comments -->
-                </section>
-            </section>
-            <!-- Suggested Videos Sidebar -->
-            <aside class="suggested-sidebar">
-                <div class="suggested-video">
-                    <div class="thumbnail-small">Thumbnail</div>
-                    <div>
-                        <p class="suggested-title">Gem Title 1</p>
-                        <p class="suggested-meta">Channel Name<br>XXX views • X Y/M/D ago</p>
-                    </div>
-                </div>
-                <div class="suggested-video">
-                    <div class="thumbnail-small">Thumbnail</div>
-                    <div>
-                        <p class="suggested-title">Gem Title 1</p>
-                        <p class="suggested-meta">Channel Name<br>XXX views • X Y/M/D ago</p>
-                    </div>
-                </div>
-                <div class="suggested-video">
-                    <div class="thumbnail-small">Thumbnail</div>
-                    <div>
-                        <p class="suggested-title">Gem Title 1</p>
-                        <p class="suggested-meta">Channel Name<br>XXX views • X Y/M/D ago</p>
-                    </div>
-                </div>
-                <div class="suggested-video">
-                    <div class="thumbnail-small">Thumbnail</div>
-                    <div>
-                        <p class="suggested-title">Gem Title 1</p>
-                        <p class="suggested-meta">Channel Name<br>XXX views • X Y/M/D ago</p>
-                    </div>
-                </div>
-                <div class="suggested-video">
-                    <div class="thumbnail-small">Thumbnail</div>
-                    <div>
-                        <p class="suggested-title">Gem Title 1</p>
-                        <p class="suggested-meta">Channel Name<br>XXX views • X Y/M/D ago</p>
-                    </div>
-                </div>
-                <div class="suggested-video">
-                    <div class="thumbnail-small">Thumbnail</div>
-                    <div>
-                        <p class="suggested-title">Gem Title 1</p>
-                        <p class="suggested-meta">Channel Name<br>XXX views • X Y/M/D ago</p>
-                    </div>
-                </div>
-                <div class="suggested-video">
-                    <div class="thumbnail-small">Thumbnail</div>
-                    <div>
-                        <p class="suggested-title">Gem Title 1</p>
-                        <p class="suggested-meta">Channel Name<br>XXX views • X Y/M/D ago</p>
-                    </div>
-                </div>
-                <div class="suggested-video">
-                    <div class="thumbnail-small">Thumbnail</div>
-                    <div>
-                        <p class="suggested-title">Gem Title 1</p>
-                        <p class="suggested-meta">Channel Name<br>XXX views • X Y/M/D ago</p>
-                    </div>
-                </div>
-                <div class="suggested-video">
-                    <div class="thumbnail-small">Thumbnail</div>
-                    <div>
-                        <p class="suggested-title">Gem Title 1</p>
-                        <p class="suggested-meta">Channel Name<br>XXX views • X Y/M/D ago</p>
-                    </div>
-                </div>
-                <!-- Repeat the suggested-video div for more suggestions -->
-            </aside>
-            
+        <h1 class="video-title"></h1>
+
+        <div class="channel-info-wrapper">
+            <div class="channel-info">
+            <img src="" alt="Channel Avatar" class="avatar-img" />
+            <div>
+                <p class="channel-name"></p>
+                <p class="subscribers"></p>
+            </div>
+            </div>
+            <div class="engagement-bar">
+            <button class="like-btn">👍</button>
+            <button class="dislike-btn">👎</button>
+            <button class="share-btn">🔗 Share</button>
+            </div>
         </div>
-        
-        
+
+        <div class="description">
+            <p class="views-date"></p>
+            <p class="desc-text"></p>
+        </div>
+        </section>
+
+        <!-- Suggested Videos Sidebar -->
+        <aside class="suggested-sidebar"><!-- JS populates --></aside>
+    </div>
     </main>
 
-    
-
-    <script src="scripts/video.js"></script>
+    <script type="module" src="./scripts/videopage.js"></script>
 </body>
 </html>

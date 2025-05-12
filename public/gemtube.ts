@@ -6,19 +6,37 @@ console.log("💎 [GemTube] script loaded");
 
 // API response type
 interface APIVideo {
+  // Identity
+  video_id: string;
   video_title: string;
+  video_desc: string;
   channel_name: string;
-  video_views: string;
-  video_score: number;
+  video_published_at: string;
+
+  // Thumbnails
   video_thumbnail_standard: string;
   video_thumbnail_max: string;
   channel_avatar: string;
-  video_published_at: string;
+  
+  // Engagement
+  video_views: string;
+  video_likes: string;
+  video_comments: string;
+  video_score: number;
+
+  // Meta
+  video_duration: string;
+
+  // Topics
+  topic_ids: string[];
+  topic_categories: string[];
+  relevant_topic_ids: string[];
 }
 
 // Internal video model
 type Video = {
   id: number;
+  videoId: string,
   title: string;
   channel: string;
   views: string;
@@ -45,7 +63,10 @@ function createTopLogo(): HTMLElement {
     cursor: "pointer",
     zIndex: "1000"
   });
-  logo.onclick = () => location.reload();
+  logo.onclick = () => {
+    // go to the home page root
+    window.location.href = "/";
+  };
   return logo;
 }
 
@@ -110,9 +131,16 @@ async function fetchVideos(q: string): Promise<APIVideo[]> {
 function mapVideos(items: APIVideo[]): Video[] {
   return items.map((v, i) => ({
     id: i + 1,
+    videoId: v.video_id,
     title: v.video_title,
+    description: v.video_desc,
+
     channel: v.channel_name,
     views: v.video_views,
+    likes: v.video_likes,
+    comments: v.video_comments,
+    topic_ids: v.topic_ids,
+    topic_categories: v.topic_categories,
     score: v.video_score,
     thumbnail: v.video_thumbnail_max || v.video_thumbnail_standard,
     channelThumbnail: v.channel_avatar,
@@ -198,6 +226,12 @@ function createVideoCard(video: Video): HTMLElement {
   // Hover zoom
   card.addEventListener("mouseenter", () => img.style.transform = "scale(1.05)");
   card.addEventListener("mouseleave", () => img.style.transform = "scale(1)");
+   // Navigate to the video page on click:
+  card.style.cursor = "pointer";
+  card.onclick = () => {
+    console.log("📤 Redirecting to videopage.html?id=", video.videoId);
+    window.location.href = `videopage.html?id=${encodeURIComponent(video.videoId)}`;
+  };
 
   card.append(thumb, info);
   return card;
@@ -269,5 +303,13 @@ async function handleSearch(query: string) {
   }
 }
 
-// Mount initial homepage
-app.append(createSearchSection());
+// Deep‐link / initial render
+const params = new URLSearchParams(window.location.search);
+const initialQ = params.get("query")?.trim();
+if (initialQ) {
+  // if we have ?query=foo, run the search immediately
+  handleSearch(initialQ);
+} else {
+  // otherwise show the blank homepage
+  app.append(createSearchSection());
+}

@@ -1,308 +1,220 @@
 /* ========== BASE STYLES ========== */
 :root {
-    --page-side-padding: 0px; /* Change this value for easy global adjustment */
+  --page-side-padding: 40px;
+}
+
+/* reduce padding on ultra-wide 2K+ */
+@media (min-width:2560px) {
+  :root { --page-side-padding: 20px; }
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
-    color: #222;
-    margin: 0;
-    padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  color: #222;
+  margin: 0;
+  padding: 0;
 }
 
 header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* Separate left and right sides */
-    padding: 16px 32px;
-    background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;               /* center everything */
+  padding: 16px var(--page-side-padding);
+  background: #fff;
 }
 
 .logo {
-    width: 140px;
-    cursor: pointer;
-    margin-right: auto; /* Stick to left */
-}
-
-.search-bar {
-    margin-left: auto;
-    margin: 0; /* Remove margin-left: auto; */
-    padding: 10px 20px;
-    border-radius: 9999px;
-    border: 1px solid #ccc;
-    width: 400px;
-    font-size: 16px;
+  position: absolute;                     /* take out of normal flow */
+  left: var(--page-side-padding);
+  width: 140px;
+  cursor: pointer;
 }
 
 .search-bar-wrapper {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+.search-bar {
+  padding: 8px 16px;
+  border-radius: 9999px;
+  border: 1px solid #ccc;
+  width: 300px;
+  font-size: 14px;
+}
+
+.search-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 9999px;
+  background: #60a5fa;
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
 }
 
 /* ========== MAIN CONTENT ========== */
 main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0 auto;
-    padding: 0 var(--page-side-padding);
-    max-width: 2560px; /* Remove the cap entirely */
+  padding: 24px var(--page-side-padding);
 }
 
 .content-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 48px;
-    width: 100%;
-    max-width: none; /* REMOVE THE WIDTH CAP */
-    padding: 0 var(--page-side-padding);
-    box-sizing: border-box;
+  display: flex;
+  gap: 48px;
 }
 
 .video-section {
-    flex-grow: 3; /* Takes 4x the space of sidebar */
-    flex-shrink: 1;
-    flex-basis: 0;
+  flex: 1 1 auto;
 }
 
+/* Player + thumbnail */
 .video-player {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    border-radius: 16px;
-    overflow: hidden; /* Ensures overlay doesn't spill outside */
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 16px;
+  overflow: hidden;
 }
 
-.video-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.85);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #ffffff;
-    font-size: 32px;
-    font-weight: bold;
-    cursor: pointer;
-    z-index: 2;
-    border-radius: 16px; /* Match the video card's border radius */
+.thumbnail-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.video-overlay:hover {
-    background-color: rgba(0, 0, 0, 0.9); /* Slightly darker on hover */
+.play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 64px;
+  color: rgba(255,255,255,0.85);
+  text-shadow: 0 0 8px rgba(0,0,0,0.6);
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s;
 }
 
-.thumbnail-placeholder {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    background-color: #ddd;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    color: #777;
-    border-radius: 16px;
-    transition: none; /* Remove transition */
-}
-
-
-.thumbnail-placeholder:hover {
-    transform: none; /* Remove pop effect */
-}
+.play-button:hover { color: #fff; }
 
 .video-title {
-    font-size: 28px;
-    font-weight: bold;
-    margin: 16px 0;
+  font-size: 28px;
+  font-weight: bold;
+  margin-top: 16px;
+}
+
+/* Channel/info + engagement on same line */
+.channel-info-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 12px 0;
 }
 
 .channel-info {
-    display: flex;
-    align-items: center;
-    gap: 12px; /* Controls space between avatar and text block */
-    margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.channel-info div p {
-    margin: 0; /* Reset default margins */
-    line-height: 1.2; /* Adjust vertical space between name and subscribers */
+.avatar-img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
-.channel-info-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-}
-
-.avatar-placeholder {
-    width: 48px;
-    height: 48px;
-    background-color: #ccc;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #777;
-    font-size: 14px;
+.channel-name {
+  font-weight: bold;
+  margin: 0;
 }
 
 .subscribers {
-    margin-top: -1px; /* Pull it up slightly */
+  color: #555;
+  font-size: 14px;
+  margin: 0;
 }
 
+/* Engagement bar floated right */
 .engagement-bar {
-    display: flex;
-    gap: 12px;
-    margin: 0;
+  display: flex;
+  gap: 8px;
 }
 
 .engagement-bar button {
-    padding: 10px 16px;
-    border: none;
-    border-radius: 9999px;
-    background-color: #e0e0e0;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 9999px;
+  background: #e0e0e0;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
 }
 
-.engagement-bar button:hover {
-    background-color: #d0d0d0;
-}
+.engagement-bar button:hover { background-color: #d0d0d0; }
 
+/* Description box */
 .description {
-    background-color: #eee;
-    padding: 16px;
-    border-radius: 12px;
-    margin-bottom: 24px;
+  background: #eee;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 24px;
 }
 
-.more {
-    display: block;
-    margin-top: 8px;
-    color: #60a5fa;
-    cursor: pointer;
+.views-date {
+  font-weight: bold;   /* views/date bold */
+  margin: 0 0 8px;
 }
 
-
-.category-section {
-    display: flex;
-    gap: 16px;
-}
-
-.category-card {
-    flex: 1;
-    background-color: #eee;
-    padding: 16px;
-    border-radius: 12px;
-    text-align: center;
-    font-size: 16px;
-}
-
-.category-card a {
-    display: block;
-    margin-top: 8px;
-    color: #60a5fa;
-    text-decoration: none;
-    font-weight: bold;
+.desc-text {
+  font-size: 14px;
+  margin: 0;
 }
 
 /* ========== SIDEBAR ========== */
 .suggested-sidebar {
-    width: 350px; /* Reduce width */
-    flex-shrink: 0;
-    padding: 16px 0; /* Remove side padding for better alignment */
+  width: 350px;
+  flex-shrink: 0;
 }
 
 .suggested-video {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    margin-bottom: 24px; /* Add breathing space between items */
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  cursor: pointer;    /* click affordance */
 }
 
 .thumbnail-small {
-    width: 100%; /* Fully use sidebar width */
-    aspect-ratio: 16/9;
-    background-color: #ddd;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: bold;
-    color: #555;
+  width: 140px;
+  aspect-ratio: 16/9;
+  overflow: hidden;
+  border-radius: 8px;
+  flex-shrink: 0;
 }
 
+.thumbnail-small img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Sidebar text */
 .suggested-title {
-    font-size: 16px;
-    font-weight: bold;
-    margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0 0 4px;
+}
+
+.suggested-channel {
+  font-size: 14px;
+  color: #777;
+  margin: 0 0 4px;
 }
 
 .suggested-meta {
-    font-size: 16px;
-    color: #555;
-    white-space: nowrap;      /* Prevent wrapping */
-    overflow: hidden;         /* Optional: Hide overflow if too long */
-    text-overflow: ellipsis;  /* Optional: Add ... if it's too long */
-    line-height: 1.3; /* Default is usually 1.4, so this tightens the gap */
-}
-
-/* ========== COMMENTS SECTION ========== */
-.comments-section {
-    width: 100%;
-    max-width: 960px;
-    margin-top: 40px;
-    margin-left: 0; /* Align directly under video content */
-    align-self: flex-start; /* Anchor to left */
-    text-align: left;
-}
-
-.comments-section h2 {
-    font-size: 24px;
-    margin-bottom: 24px;
-}
-
-.comment {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 20px;
-}
-
-.avatar-placeholder {
-    width: 48px;
-    height: 48px;
-    background-color: #ccc;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #777;
-    font-size: 14px;
-    margin-top: 14px; /* Pushes avatar down slightly */
-}
-
-.replies-link {
-    color: #60a5fa;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-@media (min-width: 1920px) {
-    .content-wrapper {
-        max-width: 1920px;
-        padding: 0 var(--page-side-padding); /* Use the variable even here */
-    }
-
-    .suggested-sidebar {
-        width: 450px; /* This one is fine if you want it bigger */
-    }
+  font-size: 14px;
+  color: #555;
+  font-weight: normal;  /* ensure normal */
+  margin: 0;
 }

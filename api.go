@@ -253,8 +253,9 @@ func filterBigBoys(results []Video) ([]Video, error) {
 	for _, video := range results {
 		subs := subscribersMap[video.ChannelID]
 		if subs <= 20000 {
-			// Inject the avatar URL directly into the struct
+			// Inject the avatar URL and subscribers number directly into the struct
 			video.ChannelAvatarURL = avatarURLMap[video.ChannelID]
+			video.ChannelSubscribers = strconv.FormatUint(subs, 10)
 			filtered = append(filtered, video)
 		} else {
 			fmt.Printf("skipping video because channel %s has %d subscribers\n", video.ChannelTitle, subs)

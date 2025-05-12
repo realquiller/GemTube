@@ -4,7 +4,7 @@ import "net/http"
 
 const (
 	defaultMaxResults    = 50
-	defaultTargetResults = 21
+	defaultTargetResults = 2
 )
 
 var (

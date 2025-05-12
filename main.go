@@ -137,22 +137,30 @@ func runFiltering(query string) []Video {
 
 func videosHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*") // CORS for frontend
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
+	// 1) If there's an "id" param, return that one video
+	if id := r.URL.Query().Get("id"); id != "" {
+		// filterVideos takes a comma-separated list of videoIDs
+		vids, err := filterVideos(id)
+		if err != nil || len(vids) == 0 {
+			http.Error(w, "Video not found", http.StatusNotFound)
+			return
+		}
+		json.NewEncoder(w).Encode(vids)
+		return
+	}
+
+	// 2) Otherwise fall back to your existing search-by-query
 	query := r.URL.Query().Get("query")
 	if query == "" {
 		http.Error(w, "Missing 'query' parameter", http.StatusBadRequest)
 		return
 	}
-
-	results := runFiltering(query) // Pass the query explicitly
-
+	results := runFiltering(query)
 	if len(results) == 0 {
 		http.Error(w, "No videos found for the given query.", http.StatusNotFound)
 		return
 	}
-
-	if err := json.NewEncoder(w).Encode(results); err != nil {
-		http.Error(w, "Failed to encode videos", http.StatusInternalServerError)
-	}
+	json.NewEncoder(w).Encode(results)
 }

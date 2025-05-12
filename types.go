@@ -95,6 +95,7 @@ type Video struct {
 	// Channel Info
 	ChannelID            string `json:"channel_id"`
 	ChannelTitle         string `json:"channel_name"`
+	ChannelSubscribers   string `json:"channel_subscribers"`
 	ChannelAvatarURL     string `json:"channel_avatar"`
 	DefaultLanguage      string `json:"channel_default_language"`
 	DefaultAudioLanguage string `json:"channel_default_audio_language"`

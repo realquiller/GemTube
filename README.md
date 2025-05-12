@@ -141,23 +141,19 @@ Get the finest gems without leaving your terminal—Hackerman vibes fully unlock
 
 - **UX/UI Revelations**:
   My first time using Figma in programming project. Spacing, typography, and accessibility? Turns out they’re kind of a big deal.
-
+  
 - **Keeping Sane**:
   Managed API & CLI modes in one codebase, dealt with caching hell, and figured out a smooth workflow between the two worlds.
 
 ## 🗺 Future Roadmap
 - **📚 Discovery Modes**:
   Add new filters like “best of big channels” based on view/sub ratios.
-
 - **❤️ User Feedback & Favorites**:
   Like/gem buttons with personalized recommendations (backed by a lightweight DB).
-
 - **🔌 Browser Extension**:
   Instant gem recommendations right on YouTube.
-
 - **👤 User Profiles & Auth**:
   Save your favorite gems and build your personal collection.
-  
 - **🌙 Dark Mode Toggle**:
   Because it’s practically a human right at this point.
 

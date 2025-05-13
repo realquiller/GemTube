@@ -74,7 +74,10 @@ func main() {
 		query := setupFlags()
 		log.Println("Running in CLI Mode...")
 
-		results := runFiltering(query)
+		results, err := runFiltering(query)
+		if err != nil {
+			log.Fatal(err)
+		}
 		checkGems(results, mode)
 
 		for _, result := range results {
@@ -97,7 +100,7 @@ func main() {
 	}
 }
 
-func runFiltering(query string) []Video {
+func runFiltering(query string) ([]Video, error) {
 	youtubePage := 1
 	nextPageToken := ""
 	seenVideos := make(map[string]bool)
@@ -107,13 +110,13 @@ func runFiltering(query string) []Video {
 		data, token, err := getSearchResults(query, nextPageToken, seenVideos)
 		if err != nil {
 			log.Println(err)
-			return nil
+			return nil, err
 		}
 
 		results, err := filterVideos(getVideoIDs(data))
 		if err != nil {
 			log.Println(err)
-			return nil
+			return nil, err
 		}
 
 		filteredResults = append(filteredResults, results...)
@@ -133,7 +136,7 @@ func runFiltering(query string) []Video {
 
 	log.Printf("Filtering complete. %d videos ready.\n", len(filteredResults))
 	fmt.Printf("Filtering complete. %d videos ready.\n", len(filteredResults))
-	return filteredResults
+	return filteredResults, nil
 }
 
 func videosHandler(w http.ResponseWriter, r *http.Request) {
@@ -162,7 +165,7 @@ func videosHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	results, err := filterVideos(query)
+	results, err := runFiltering(query)
 	if err != nil {
 		if errors.Is(err, ErrQuotaExceeded) {
 			http.Error(w, "quotaExceeded", http.StatusForbidden)

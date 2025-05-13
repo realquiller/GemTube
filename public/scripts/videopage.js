@@ -36,6 +36,8 @@ function fetchSuggestions(query) {
 }
 // Populate the main video area
 function populateMain(video) {
+    // identify yourself!
+    console.log("🔍 full video payload:", video);
     // 1) Show thumbnail + play overlay
     const player = document.querySelector('.video-player');
     player.innerHTML = `
